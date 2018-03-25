@@ -8,10 +8,8 @@
 //
 
 bool RC4_cipher::init() {
-    if (key == nullptr) {
-        std::cout << "Ключ не установлен\n";
+    if (key == nullptr)
         return false;
-    }
     //RC4 KSA (key-scheduling) - алгоритм (алгоритм инициализации):
     for (unsigned short i = 0; i < 256; ++i) {
         S[i] = static_cast<unsigned char>(i);
@@ -69,7 +67,10 @@ bool RC4_cipher::encryptDecrypt(const char *inFileName, const char *outFileName,
         return false;
     }
     std::string inStr;
-    init();
+    if (!init()) {
+        std::cout << "Ключ не установлен\n";
+        return false;
+    }
     unsigned char gamma, c;
     while (!in.eof()) {
         //Входной текст (открытый текст или шифртекст) читается построчно:
@@ -103,7 +104,7 @@ bool RC4_cipher::encryptDecrypt(const char *inFileName, const char *outFileName,
             //В случае расшифрования - наоборот - считываются коды символов,
             //а записываются просто символы:
             std::size_t pos;
-            for ( ; ;) {
+            for ( ; ; ) {
                 try {
                     //Преобразует символы строки в число:
                     //(pos - индекс элемента, следующего за последним преобразованным,
